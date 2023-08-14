@@ -5,7 +5,7 @@ const { serialize } = require("cookie");
 
 const generateToken = () => {
   try {
-    const token = jwt.sign({}, secretKey, { expiresIn: "1h" });
+    const token = jwt.sign({}, secretKey);
     return token;
   } catch (e) {
     return next(new HttpError("Something went wrong", 401));
