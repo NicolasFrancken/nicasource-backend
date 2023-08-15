@@ -2,10 +2,12 @@ const express = require("express");
 const { check } = require("express-validator");
 
 const creatorsControllers = require("../controllers/creators-controllers");
+const { verifyToken } = require("../middlewares/auth");
 
 const router = express.Router();
 
-const { signup, signin } = creatorsControllers;
+const { signup, signin, getCreators, getCreator, switchFollow } =
+  creatorsControllers;
 
 router.post(
   "/signup",
@@ -22,5 +24,11 @@ router.post(
   [check("email").normalizeEmail({ gmail_remove_dots: false })],
   signin
 );
+
+router.get("/:creatorId", verifyToken, getCreators);
+
+router.get("/creator/:creatorId", verifyToken, getCreator);
+
+router.put("/follow/:creatorId", verifyToken, switchFollow);
 
 module.exports = router;

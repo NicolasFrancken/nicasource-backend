@@ -12,6 +12,7 @@ const {
   updateVideo,
   deleteVideo,
   publishVideo,
+  likeVideo,
 } = videosControllers;
 
 router.get("/", getPublishedVideos);
@@ -27,5 +28,7 @@ router.put("/creator/:videoId", updateVideo);
 router.put("/creator/publish/:videoId", publishVideo);
 
 router.delete("/creator/:videoId", deleteVideo);
+
+router.put("/like/:creatorId", likeVideo);
 
 module.exports = router;

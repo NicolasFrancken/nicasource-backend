@@ -92,7 +92,6 @@ const updateVideo = async (req, res, next) => {
 
 const publishVideo = async (req, res, next) => {
   const { videoId } = req.params;
-  console.log(videoId);
 
   try {
     const result = await pool.query(
@@ -133,6 +132,47 @@ const deleteVideo = async (req, res, next) => {
   }
 };
 
+const likeVideo = async (req, res, next) => {
+  const { creatorId } = req.params;
+  const { videoId } = req.body;
+
+  try {
+    const result = await pool.query(
+      "SELECT * FROM creators WHERE id_creator = $1 AND $2 = ANY(liked_videos)",
+      [creatorId, videoId]
+    );
+
+    if (result.rows.length === 0) {
+      try {
+        const result = await pool.query(
+          "UPDATE creators SET liked_videos = array_append(liked_videos, $2) WHERE id_creator = $1 RETURNING *",
+          [creatorId, videoId]
+        );
+
+        res.json({ result: result.rows[0] });
+      } catch (e) {
+        const error = new HttpError(e.message, 500);
+        return next(error);
+      }
+    } else {
+      try {
+        const result = await pool.query(
+          "UPDATE creators SET liked_videos = array_remove(liked_videos, $2) WHERE id_creator = $1 RETURNING *",
+          [creatorId, videoId]
+        );
+
+        res.json({ result: result.rows[0] });
+      } catch (e) {
+        const error = new HttpError(e.message, 500);
+        return next(error);
+      }
+    }
+  } catch (e) {
+    const error = new HttpError(e.message, 500);
+    return next(error);
+  }
+};
+
 exports.getPublishedVideos = getPublishedVideos;
 exports.getVideosByCreatorId = getVideosByCreatorId;
 exports.getVideoByVideoId = getVideoByVideoId;
@@ -140,3 +180,4 @@ exports.createVideo = createVideo;
 exports.updateVideo = updateVideo;
 exports.publishVideo = publishVideo;
 exports.deleteVideo = deleteVideo;
+exports.likeVideo = likeVideo;

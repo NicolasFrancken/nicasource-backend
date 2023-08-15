@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const HttpError = require("../models/http-error");
 const { secretKey } = require("../config");
-const { serialize } = require("cookie");
 
 const generateToken = () => {
   try {
@@ -12,8 +11,8 @@ const generateToken = () => {
   }
 };
 
-const verifyToken = (req, res, next) => {
-  const token = req.cookies._auth;
+const verifyToken = async (req, res, next) => {
+  const token = await req.cookies._auth;
 
   if (!token) {
     return next(new HttpError("Access denied", 401));
@@ -27,39 +26,5 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-const renewToken = (req, res, next) => {
-  let token = req.cookies.token;
-
-  if (!token) {
-    return next(new HttpError("Access denied", 401));
-  }
-
-  try {
-    const decodedToken = jwt.verify(token, secretKey);
-    const expirationTime = decodedToken.exp * 1000;
-
-    const now = Date.now();
-    const renewalThreshold = 5 * 60 * 1000;
-
-    if (expirationTime - now <= renewalThreshold) {
-      const newToken = jwt.sign({}, secretKey, { expiresIn: "1h" });
-
-      const serialized = serialize("token", newToken, {
-        maxAge: 3600000,
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax",
-        path: "/",
-        domain: "localhost",
-      });
-
-      res.setHeader("Set-Cookie", serialized);
-    }
-  } catch (e) {
-    return next(new HttpError("Something went wrong", 401));
-  }
-};
-
 exports.generateToken = generateToken;
 exports.verifyToken = verifyToken;
-exports.renewToken = renewToken;

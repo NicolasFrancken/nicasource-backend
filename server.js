@@ -7,7 +7,7 @@ const { port } = require("./config");
 const HttpError = require("./models/http-error");
 const videosRoutes = require("./routes/videos-routes");
 const creatorsRoutes = require("./routes/creators-routes");
-const { verifyToken, renewToken } = require("./middlewares/auth");
+const { verifyToken } = require("./middlewares/auth");
 
 const app = express();
 
@@ -20,10 +20,6 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
-
-// schedule.scheduleJob("* * * * *", () => {
-//   app.use(renewToken());
-// });
 
 app.use("/api/creators", creatorsRoutes);
 app.use("/api/videos", verifyToken, videosRoutes);
