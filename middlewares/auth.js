@@ -13,7 +13,7 @@ const generateToken = () => {
 };
 
 const verifyToken = (req, res, next) => {
-  const token = req.cookies.token;
+  const token = req.cookies._auth;
 
   if (!token) {
     return next(new HttpError("Access denied", 401));

@@ -53,18 +53,19 @@ const signin = async (req, res, next) => {
     }
 
     const token = await generateToken();
-    const serialized = serialize("token", token, {
-      maxAge: 3600000,
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      path: "/",
-      domain: "localhost",
-    });
 
-    res.setHeader("Set-Cookie", serialized);
+    // const serialized = serialize("token", token, {
+    //   maxAge: 3600000,
+    //   httpOnly: true,
+    //   secure: false,
+    //   sameSite: "lax",
+    //   path: "/",
+    //   domain: "localhost",
+    // });
 
-    res.json(result.rows[0]);
+    // res.setHeader("Set-Cookie", serialized);
+
+    res.json({ result: result.rows[0], token });
   } catch (e) {
     const error = new HttpError(e.message, 500);
     return next(error);
