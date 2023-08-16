@@ -1,5 +1,4 @@
 const { validationResult } = require("express-validator");
-const { serialize } = require("cookie");
 
 const HttpError = require("../models/http-error");
 const pool = require("../db");
@@ -8,7 +7,7 @@ const { generateToken } = require("../middlewares/auth");
 const signup = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return next(new HttpError("Invalid credentials, please try again", 422));
+    return next(new HttpError("Invalid credentials, please try again", 401));
   }
 
   const { name, email, password, image } = req.body;
@@ -23,7 +22,7 @@ const signup = async (req, res, next) => {
 
     res.json({ result: result.rows[0], token });
   } catch (e) {
-    const error = new HttpError(e.message, 500);
+    const error = new HttpError("There was an error", 500);
     return next(error);
   }
 };
@@ -38,7 +37,7 @@ const signin = async (req, res, next) => {
     );
 
     if (result.rows.length === 0) {
-      const error = new HttpError("Invalid credentials", 404);
+      const error = new HttpError("Invalid credentials", 401);
       return next(error);
     }
 
@@ -46,7 +45,7 @@ const signin = async (req, res, next) => {
 
     res.json({ result: result.rows[0], token });
   } catch (e) {
-    const error = new HttpError(e.message, 500);
+    const error = new HttpError("There was an error", 500);
     return next(error);
   }
 };
@@ -61,13 +60,13 @@ const getCreators = async (req, res, next) => {
     );
 
     if (result.rows.length === 0) {
-      const error = new HttpError("No creators found...", 500);
+      const error = new HttpError("No creators found...", 404);
       return next(error);
     }
 
     res.json({ result: result.rows });
   } catch (e) {
-    const error = new HttpError(e.message, 500);
+    const error = new HttpError("There was an error", 500);
     return next(error);
   }
 };
@@ -88,7 +87,7 @@ const getCreator = async (req, res, next) => {
 
     res.json({ result: result.rows[0] });
   } catch (e) {
-    const error = new HttpError(e.message, 500);
+    const error = new HttpError("There was an error", 500);
     return next(error);
   }
 };
@@ -112,7 +111,7 @@ const switchFollow = async (req, res, next) => {
 
         res.json({ result: result.rows[0] });
       } catch (e) {
-        const error = new HttpError(e.message, 500);
+        const error = new HttpError("There was an error", 500);
         return next(error);
       }
     } else {
@@ -124,12 +123,12 @@ const switchFollow = async (req, res, next) => {
 
         res.json({ result: result.rows[0] });
       } catch (e) {
-        const error = new HttpError(e.message, 500);
+        const error = new HttpError("There was an error", 500);
         return next(error);
       }
     }
   } catch (e) {
-    const error = new HttpError(e.message, 500);
+    const error = new HttpError("There was an error", 500);
     return next(error);
   }
 };

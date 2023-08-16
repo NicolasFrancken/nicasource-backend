@@ -10,7 +10,7 @@ const getPublishedVideos = async (req, res, next) => {
 
     res.json(result.rows);
   } catch (e) {
-    const error = new HttpError(e.message, 500);
+    const error = new HttpError("There was an error", 500);
     return next(error);
   }
 };
@@ -25,7 +25,7 @@ const getVideosByCreatorId = async (req, res, next) => {
 
     res.json(creatorVideos.rows);
   } catch (e) {
-    const error = new HttpError(e.message, 500);
+    const error = new HttpError("There was an error", 500);
     return next(error);
   }
 };
@@ -46,7 +46,7 @@ const getVideoByVideoId = async (req, res, next) => {
 
     res.json(result.rows[0]);
   } catch (e) {
-    const error = new HttpError(e.message, 500);
+    const error = new HttpError("There was an error", 500);
     return next(error);
   }
 };
@@ -57,13 +57,13 @@ const createVideo = async (req, res, next) => {
 
   try {
     const createdVideo = await pool.query(
-      "INSERT INTO videos (url, title, id_creator) VALUES ($1, $2, $3) RETURNING *", // con esto le digo "inserta en la tabla videos los datos url y title, y devolve (RETURNING) lo creado"
+      "INSERT INTO videos (url, title, id_creator) VALUES ($1, $2, $3) RETURNING *",
       [url, title, creatorId]
     );
 
     res.json(createdVideo.rows);
   } catch (e) {
-    const error = new HttpError(e.message, 500);
+    const error = new HttpError("There was an error", 500);
     return next(error);
   }
 };
@@ -85,7 +85,7 @@ const updateVideo = async (req, res, next) => {
 
     res.json(result.rows[0]);
   } catch (e) {
-    const error = new HttpError(e.message, 500);
+    const error = new HttpError("There was an error", 500);
     return next(error);
   }
 };
@@ -106,7 +106,7 @@ const publishVideo = async (req, res, next) => {
 
     res.json(result.rows[0]);
   } catch (e) {
-    const error = new HttpError(e.message, 500);
+    const error = new HttpError("There was an error", 500);
     return next(error);
   }
 };
@@ -127,7 +127,7 @@ const deleteVideo = async (req, res, next) => {
 
     res.sendStatus(204);
   } catch (e) {
-    const error = new HttpError(e.message, 500);
+    const error = new HttpError("There was an error", 500);
     return next(error);
   }
 };
@@ -151,7 +151,7 @@ const likeVideo = async (req, res, next) => {
 
         res.json({ result: result.rows[0] });
       } catch (e) {
-        const error = new HttpError(e.message, 500);
+        const error = new HttpError("There was an error", 500);
         return next(error);
       }
     } else {
@@ -163,12 +163,12 @@ const likeVideo = async (req, res, next) => {
 
         res.json({ result: result.rows[0] });
       } catch (e) {
-        const error = new HttpError(e.message, 500);
+        const error = new HttpError("There was an error", 500);
         return next(error);
       }
     }
   } catch (e) {
-    const error = new HttpError(e.message, 500);
+    const error = new HttpError("There was an error", 500);
     return next(error);
   }
 };
