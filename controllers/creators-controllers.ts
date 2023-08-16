@@ -1,10 +1,10 @@
-const { validationResult } = require("express-validator");
+import { validationResult } from "express-validator";
+import { Request, Response, NextFunction } from "express";
+import HttpError from "../models/http-error";
+import pool from "../db";
+import { generateToken } from "../middlewares/auth";
 
-const HttpError = require("../models/http-error");
-const pool = require("../db");
-const { generateToken } = require("../middlewares/auth");
-
-const signup = async (req, res, next) => {
+const signup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(new HttpError("Invalid credentials, please try again", 401));
@@ -27,7 +27,7 @@ const signup = async (req, res, next) => {
   }
 };
 
-const signin = async (req, res, next) => {
+const signin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { email, password } = req.body;
 
   try {
@@ -50,7 +50,7 @@ const signin = async (req, res, next) => {
   }
 };
 
-const getCreators = async (req, res, next) => {
+const getCreators = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { creatorId } = req.params;
 
   try {
@@ -71,7 +71,7 @@ const getCreators = async (req, res, next) => {
   }
 };
 
-const getCreator = async (req, res, next) => {
+const getCreator = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { creatorId } = req.params;
 
   try {
@@ -92,7 +92,7 @@ const getCreator = async (req, res, next) => {
   }
 };
 
-const switchFollow = async (req, res, next) => {
+const switchFollow = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { creatorId } = req.params;
   const { followCreatorId } = req.body;
 
@@ -133,8 +133,4 @@ const switchFollow = async (req, res, next) => {
   }
 };
 
-exports.signup = signup;
-exports.signin = signin;
-exports.getCreators = getCreators;
-exports.getCreator = getCreator;
-exports.switchFollow = switchFollow;
+export { signup, signin, getCreators, getCreator, switchFollow };

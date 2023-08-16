@@ -1,6 +1,5 @@
-const express = require("express");
-
-const videosControllers = require("../controllers/videos-controllers");
+import express from "express";
+import * as videosControllers from "../controllers/videos-controllers";
 
 const router = express.Router();
 
@@ -31,4 +30,4 @@ router.delete("/creator/:videoId", deleteVideo);
 
 router.put("/like/:creatorId", likeVideo);
 
-module.exports = router;
+export default router;

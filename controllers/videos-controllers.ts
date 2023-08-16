@@ -1,8 +1,8 @@
-const pool = require("../db");
+import { Request, Response, NextFunction } from "express";
+import HttpError from "../models/http-error";
+import pool from "../db";
 
-const HttpError = require("../models/http-error");
-
-const getPublishedVideos = async (req, res, next) => {
+const getPublishedVideos = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const result = await pool.query(
       "SELECT * FROM videos WHERE published = true"
@@ -15,7 +15,7 @@ const getPublishedVideos = async (req, res, next) => {
   }
 };
 
-const getVideosByCreatorId = async (req, res, next) => {
+const getVideosByCreatorId = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { creatorId } = req.params;
   try {
     const creatorVideos = await pool.query(
@@ -30,7 +30,7 @@ const getVideosByCreatorId = async (req, res, next) => {
   }
 };
 
-const getVideoByVideoId = async (req, res, next) => {
+const getVideoByVideoId = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { videoId } = req.params;
 
   try {
@@ -51,7 +51,7 @@ const getVideoByVideoId = async (req, res, next) => {
   }
 };
 
-const createVideo = async (req, res, next) => {
+const createVideo = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { creatorId } = req.params;
   const { url, title } = req.body;
 
@@ -68,7 +68,7 @@ const createVideo = async (req, res, next) => {
   }
 };
 
-const updateVideo = async (req, res, next) => {
+const updateVideo = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { videoId } = req.params;
   const { title } = req.body;
 
@@ -90,7 +90,7 @@ const updateVideo = async (req, res, next) => {
   }
 };
 
-const publishVideo = async (req, res, next) => {
+const publishVideo = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { videoId } = req.params;
 
   try {
@@ -111,7 +111,7 @@ const publishVideo = async (req, res, next) => {
   }
 };
 
-const deleteVideo = async (req, res, next) => {
+const deleteVideo = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { videoId } = req.params;
 
   try {
@@ -132,7 +132,7 @@ const deleteVideo = async (req, res, next) => {
   }
 };
 
-const likeVideo = async (req, res, next) => {
+const likeVideo = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { creatorId } = req.params;
   const { videoId } = req.body;
 
@@ -173,11 +173,13 @@ const likeVideo = async (req, res, next) => {
   }
 };
 
-exports.getPublishedVideos = getPublishedVideos;
-exports.getVideosByCreatorId = getVideosByCreatorId;
-exports.getVideoByVideoId = getVideoByVideoId;
-exports.createVideo = createVideo;
-exports.updateVideo = updateVideo;
-exports.publishVideo = publishVideo;
-exports.deleteVideo = deleteVideo;
-exports.likeVideo = likeVideo;
+export {
+  getPublishedVideos,
+  getVideosByCreatorId,
+  getVideoByVideoId,
+  createVideo,
+  updateVideo,
+  publishVideo,
+  deleteVideo,
+  likeVideo,
+};

@@ -1,9 +1,9 @@
-const { Pool } = require("pg");
-const { db } = require("./config");
-const path = require("path");
-const fs = require("fs");
+import { Pool } from "pg";
+import { db } from "./config";
+import path from "path";
+import fs from "fs/promises";
 
-async function createDatabase() {
+async function createDatabase(): Promise<void> {
   const pool = new Pool({
     user: db.user,
     password: db.password,
@@ -33,7 +33,7 @@ async function createDatabase() {
     });
 
     const sqlScriptPath = path.join(__dirname, "./database/db.sql");
-    const sqlScript = fs.readFileSync(sqlScriptPath, "utf8");
+    const sqlScript = await fs.readFile(sqlScriptPath, "utf8");
     await newPool.query(sqlScript);
     newPool.end();
   } catch (e) {
@@ -43,4 +43,4 @@ async function createDatabase() {
   }
 }
 
-module.exports = { createDatabase };
+export { createDatabase };

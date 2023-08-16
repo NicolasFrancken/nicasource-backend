@@ -1,13 +1,12 @@
-const express = require("express");
-const { check } = require("express-validator");
+import express from "express";
+import { check } from "express-validator";
 
-const creatorsControllers = require("../controllers/creators-controllers");
-const { verifyToken } = require("../middlewares/auth");
+import * as creatorsControllers from "../controllers/creators-controllers";
+import { verifyToken } from "../middlewares/auth";
 
 const router = express.Router();
 
-const { signup, signin, getCreators, getCreator, switchFollow } =
-  creatorsControllers;
+const { signup, signin, getCreators, getCreator, switchFollow } = creatorsControllers;
 
 router.post(
   "/signup",
@@ -31,4 +30,4 @@ router.get("/creator/:creatorId", verifyToken, getCreator);
 
 router.put("/follow/:creatorId", verifyToken, switchFollow);
 
-module.exports = router;
+export default router;

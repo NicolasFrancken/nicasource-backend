@@ -1,5 +1,5 @@
-const { Pool } = require("pg");
-const { db } = require("./config");
+import { Pool } from "pg";
+import { db } from "./config";
 
 const pool = new Pool({
   user: db.user,
@@ -9,4 +9,4 @@ const pool = new Pool({
   database: db.database,
 });
 
-module.exports = pool;
+export default pool;
