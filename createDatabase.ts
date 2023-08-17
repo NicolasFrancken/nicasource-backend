@@ -32,10 +32,24 @@ async function createDatabase(): Promise<void> {
       database: db.database,
     });
 
-    const sqlScriptPath = path.join(__dirname, "./database/db.sql");
-    const sqlScript = await fs.readFile(sqlScriptPath, "utf8");
-    await newPool.query(sqlScript);
-    newPool.end();
+
+    const secondResult = await newPool.query(`
+    SELECT EXISTS (
+        SELECT 1
+        FROM information_schema.tables
+        WHERE table_name = 'creators'
+    );
+  `);
+
+    if (secondResult.rows.length === 0) {
+      newPool.end();
+      return;
+    } else {
+      const sqlScriptPath = path.join(__dirname, "./database/db.sql");
+      const sqlScript = await fs.readFile(sqlScriptPath, "utf8");
+      await newPool.query(sqlScript);
+      newPool.end();
+    }
   } catch (e) {
     console.log("There was an error", e);
   } finally {
