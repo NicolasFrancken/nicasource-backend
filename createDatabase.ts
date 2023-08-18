@@ -39,7 +39,9 @@ async function createDatabase(): Promise<void> {
     );
   `);
 
-    if (secondResult.rows.length === 0) {
+
+
+    if (secondResult.rows[0].exists === true) {
       newPool.end();
       return;
     } else {
