@@ -14,32 +14,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createDatabase = void 0;
 const pg_1 = require("pg");
-const config_1 = require("./config");
 const path_1 = __importDefault(require("path"));
 const promises_1 = __importDefault(require("fs/promises"));
 function createDatabase() {
     return __awaiter(this, void 0, void 0, function* () {
-        const pool = new pg_1.Pool({
-            user: config_1.db.user,
-            password: config_1.db.password,
-            host: config_1.db.host,
-            port: config_1.db.port,
-            database: config_1.db.postgresDatabase,
-        });
+        // const pool = new Pool({
+        //   // user: db.user,
+        //   // password: db.password,
+        //   // host: db.host,
+        //   // port: db.port,
+        //   // database: db.postgresDatabase,
+        //   user: "nico",
+        //   password: "LV4nmfFels9Ke3TvvLmdlmvpjhGFKktv",
+        //   host: "dpg-cjf5rpgcfp5c73fkvu1g-a",
+        //   port: 5432,
+        //   database: "nicasourcedb",
+        // });
         try {
-            const result = yield pool.query("SELECT datname FROM pg_database WHERE datname = $1", ["nicasourcedb"]);
-            if (result.rows.length === 0) {
-                yield pool.query(`CREATE DATABASE nicasourcedb`);
-            }
-            else {
-                return;
-            }
+            //   const result = await pool.query(
+            //     "SELECT datname FROM pg_database WHERE datname = $1",
+            //     ["nicasourcedb"]
+            //   );
+            //   if (result.rows.length === 0) {
+            //     await pool.query(`CREATE DATABASE nicasourcedb`);
+            //   } else {
+            //     return;
+            //   }
             const newPool = new pg_1.Pool({
-                user: config_1.db.user,
-                password: config_1.db.password,
-                host: config_1.db.host,
-                port: config_1.db.port,
-                database: config_1.db.database,
+                user: "nico",
+                password: "LV4nmfFels9Ke3TvvLmdlmvpjhGFKktv",
+                host: "dpg-cjf5rpgcfp5c73fkvu1g-a",
+                port: 5432,
+                database: "nicasourcedb",
             });
             const sqlScriptPath = path_1.default.join(__dirname, "./database/db.sql");
             const sqlScript = yield promises_1.default.readFile(sqlScriptPath, "utf8");
@@ -48,9 +54,6 @@ function createDatabase() {
         }
         catch (e) {
             console.log("There was an error", e);
-        }
-        finally {
-            pool.end();
         }
     });
 }

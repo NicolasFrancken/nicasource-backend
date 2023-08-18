@@ -13,4 +13,5 @@ const db = {
 const port = Number(process.env.PORT!);
 const secretKey = process.env.SECRET_KEY!;
 
+
 export { db, port, secretKey };
