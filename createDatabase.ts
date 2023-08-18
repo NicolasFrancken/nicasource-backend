@@ -20,9 +20,7 @@ async function createDatabase(): Promise<void> {
 
     if (result.rows.length === 0) {
       await pool.query(`CREATE DATABASE nicasourcedb`);
-    } else {
-      return;
-    }
+    } 
 
     const newPool = new Pool({
       user: db.user,
